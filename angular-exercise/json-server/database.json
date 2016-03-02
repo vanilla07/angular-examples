@@ -1,0 +1,86 @@
+{
+  	"bookings": [
+	    {	
+	    	"id":0,
+	    	"room": 1,
+			"name": "Mme Percepale",
+			"guestsNumber": 2,
+			"dateIn": "2016-02-13T17:57:28.556094Z",
+			"dateOut": "2016-02-17T17:57:28.556094Z",
+			"dateReservation": "2016-01-01T17:57:28.556094Z",
+			"status": 2,
+			"notes": "Un bébé - lit parapluie",
+			"canal": 1
+		},
+		{	
+	    	"id":1,
+	    	"room": 1,
+			"name": "Mme Chapeau",
+			"guestsNumber": 1,
+			"dateIn": "2016-03-13T17:57:28.556094Z",
+			"dateOut": "2016-03-17T17:57:28.556094Z",
+			"dateReservation": "2016-01-01T17:57:28.556094Z",
+			"status": 1,
+			"notes": "Un bébé - lit parapluie",
+			"canal": 1
+		},
+		{	
+	    	"id":2,
+	    	"room": 0,
+			"name": "M Rigent",
+			"guestsNumber": 1,
+			"dateIn": "2016-02-22T17:57:28.556094Z",
+			"dateOut": "2016-02-25T17:57:28.556094Z",
+			"dateReservation": "2016-01-01T17:57:28.556094Z",
+			"status": 2,
+			"notes": "Un bébé - lit parapluie",
+			"canal": 0
+		},
+		{	
+	    	"id":3,
+	    	"room": 2,
+			"name": "M Erkan",
+			"guestsNumber": 2,
+			"dateIn": "2016-02-13T17:57:28.556094Z",
+			"dateOut": "2016-02-17T17:57:28.556094Z",
+			"dateReservation": "2016-01-01T17:57:28.556094Z",
+			"status": 1,
+			"notes": "Un bébé - lit parapluie",
+			"canal": 0
+		}
+	],
+	"rooms": [
+		{
+			"id" : 0,
+			"name" : "Premier Cru",
+			"price" : 98
+		},
+		{
+			"id" : 1,
+			"name" : "Grand Cru",
+			"price" : 98
+		},
+		{
+			"id" : 2,
+			"name" : "Corton Charlemagne",
+			"price" : 98
+		}
+	],
+	"canals" : [
+		{
+			"id": 0, 
+			"text": "lapasserelledescorton.fr",
+			"url": "http://www.lapasserelledescorton.fr/"
+		},
+		{
+			"id": 1, 
+			"text": "booking.com",
+			"url": "http://www.booking.com/index.fr.html"
+		},
+		{
+			"id": 2, 
+			"text": "airbnb.com",
+			"url": "https://www.airbnb.fr/"
+		} 
+	]
+ }
