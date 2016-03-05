@@ -46,7 +46,7 @@
 			        <div ng-message="mindate"><i class="fa fa-exclamation-triangle"></i> Cette date n'est pas disponible</div>
 		      	</div>
                 <div class="validation-messages" role="alert" ng-hide="hideAvailibilityMsg">
-                    <div><i class="fa fa-exclamation-triangle"></i> La période sélectionnée n'est pas disponible</div>
+                    <div><i class="fa fa-exclamation-triangle"></i> La période sélectionnée n'est pas disponible (chambre {{roomName}})</div>
                 </div>
             </div>
         </div>
@@ -54,14 +54,14 @@
         <div class="form-group">
             <label for="dateEnd" class="col-sm-6 control-label">Date de fin * (non incluse)</label>
             <div class="col-sm-6">
-                <md-datepicker ng-model="vacation.dateEnd" md-placeholder="Entrez une date" required md-min-date="dateOut" name="dateEnd" ng-change="fullDates()"></md-datepicker>
+                <md-datepicker ng-model="vacation.dateEnd" md-placeholder="Entrez une date" required md-min-date="minDateOut" md-max-date="maxDateOut" name="dateEnd" ng-change="fullDates()"></md-datepicker>
                 <div class="validation-messages" ng-messages="vacationForm.dateEnd.$error" role="alert">
 			        <div ng-message="valid"><i class="fa fa-exclamation-triangle"></i> Veuillez entrer une date valide ("jj/mm/aaaa")</div>
 			        <div ng-message="required"><i class="fa fa-exclamation-triangle"></i> Ce champ date est obligatoire</div>
 			        <div ng-message="mindate"><i class="fa fa-exclamation-triangle"></i> Cette date n'est pas disponible</div>
 		      	</div>
                 <div class="validation-messages" role="alert" ng-hide="hideAvailibilityMsg">
-                    <div><i class="fa fa-exclamation-triangle"></i> La période sélectionnée n'est pas disponible</div>
+                    <div><i class="fa fa-exclamation-triangle"></i> La période sélectionnée n'est pas disponible (chambre {{roomName}})</div>
                 </div>
             </div>
         </div>
