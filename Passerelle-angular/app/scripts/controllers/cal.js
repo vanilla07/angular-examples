@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('passerelle2App')
-    .controller('CalCtrl', [ '$scope', 'bookingsService', '$log', function($scope, bookingsService,$log) { 
+    .controller('CalCtrl', [ '$scope', 'resourcesService', '$log', function($scope, resourcesService,$log) { 
 		$scope.$log = $log;
 		$scope.bookingTemplate = 'views/bookingForm.html';
 		$scope.vacationTemplate = 'views/vacationForm.html';
@@ -10,7 +10,7 @@ angular.module('passerelle2App')
 		$scope.selectedBooking = '';
 		$scope.showBookings = false;
 		$scope.message = 'Loading ...';
-        bookingsService.getBookings().query(
+        resourcesService.getBookings().query(
             function(response) {
                 $scope.bookings = response;
                 $scope.showBookings = true;
@@ -37,6 +37,14 @@ angular.module('passerelle2App')
 		      price: 98
 		    }
 		];
+		//sera inutile une fois le service REST à jour
+		for (var i = 0; i < $scope.rooms.length; i++) {
+			var room = $scope.rooms[i];
+			room.bookings = resourcesService.getBookings().query();
+			room.vacations = resourcesService.getVacation().query();
+		}
+
+
 		$scope.channels = [
 		    {
 		      id: 0,
@@ -90,10 +98,6 @@ angular.module('passerelle2App')
 			else {
 				$scope.reverseSort = !$scope.reverseSort;
 			}
-		};
-
-		$scope.isRoomAvailable = function(dateInA, dateOutA, dateInB, dateOutB) {
-			return ( (dateInA > dateInB && dateInA >= dateOutB) || (dateInB > dateInA && dateInB >= dateOutA) );
 		};
 
 	}])

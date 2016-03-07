@@ -1,30 +1,24 @@
 'use strict';
 
 angular.module('passerelle2App')
-    .controller('VacationCtrl', [ '$scope', 'bookingsService', '$log', '$state', function($scope, bookingsService, $log, $state) { 
+    .controller('VacationCtrl', [ '$scope', 'resourcesService', 'formService', '$log', '$state', function($scope, resourcesService, formService, $log, $state) { 
 		$scope.$log = $log;
 		$scope.hideAvailibilityMsg = false;
-		$scope.now = new Date();
-		$scope.minDate = new Date(
-			$scope.now.getFullYear(),
-			$scope.now.getMonth(),
-			$scope.now.getDate()
-		);
-		$scope.minDateOut = new Date(
-			$scope.minDate.getFullYear(),
-			$scope.minDate.getMonth(),
-			$scope.minDate.getDate()+1
-		);
-		$scope.maxDateOut = new Date(
-			$scope.minDateOut.getFullYear(),
-			$scope.minDateOut.getMonth()+1,
-			$scope.minDateOut.getDate()
-		);
+		$scope.noRoomSelected = false;
+		$scope.selectedRooms = [];
 		
-		$scope.fullDates = function () {
+		$scope.minDate = formService.minDate;
+		//recalculate the limits of dateOut
+		formService.updateDateOutLimits($scope.minDate);
+		$scope.minDateOut = formService.minDateOut;
+		$scope.maxDateOut = formService.maxDateOut;
+		
+		var j = 0;
+		$scope.checkAvailability = function () {
 			$scope.hideAvailibilityMsg = true;
-			for (var j = $scope.rooms.length - 1; j >= 0; j--) {
-				if (!isPeriodAvailable($scope.rooms[j].id, $scope.vacation.dateStart, $scope.vacation.dateEnd)){
+			for (j = $scope.selectedRooms.length - 1; j >= 0; j--) {
+				var roomId = $scope.selectedRooms[j];
+				if (!formService.isPeriodAvailable($scope.rooms[roomId], $scope.vacation.dateStart, $scope.vacation.dateEnd)){
 					$scope.hideAvailibilityMsg = false;
 					$scope.roomName = $scope.rooms[j].name;
 					break;
@@ -32,51 +26,37 @@ angular.module('passerelle2App')
 			}
 		};
 
-		//sera inutile une fois le service à jour
-		for (var i = 0; i < $scope.rooms.length; i++) {
-			var room = $scope.rooms[i];
-			room.bookings = bookingsService.getBookings().query();
-			room.vacations = bookingsService.getVacation().query();
-		}
-
-		var isPeriodAvailable = function(roomId, dateIn, dateOut) {
-			var result = true;
-			var roomDatas = $scope.rooms[roomId];
-            for (var i = roomDatas.bookings.length - 1; i >= 0; i--) {
-				if (roomId === roomDatas.bookings[i].room) {
-					if (!$scope.isRoomAvailable(dateIn, dateOut, new Date(roomDatas.bookings[i].dateIn), new Date(roomDatas.bookings[i].dateOut))) {
-						result = false;
-						break;
-					}
-				}
+		$scope.onChangeDateStart = function () {
+			//update dateEnd if needed
+			$scope.vacation.dateEnd = formService.updateDateEnd($scope.vacation.dateStart, $scope.vacation.dateEnd);
+			//update the limits of dateOut
+			$scope.minDateOut = formService.minDateOut;
+			$scope.maxDateOut = formService.maxDateOut;
+			//update error message
+			$scope.checkAvailability();	
+		};
+		
+		$scope.initSelectedRooms = function () {
+			$scope.selectedRooms = [];
+			for (j = 0; j < $scope.rooms.length; j++) {
+				$scope.selectedRooms.push($scope.rooms[j].id);
 			}
-			for (i = roomDatas.vacations.length - 1; i >= 0; i--) {
-				if (roomId === roomDatas.vacations[i].room) {
-					if (!$scope.isRoomAvailable(dateIn, dateOut, new Date(roomDatas.vacations[i].dateStart), new Date(roomDatas.vacations[i].dateEnd))) {
-						result = false;
-						break;
-					}
-				}
-			}
-			return result;
 		};
 
-		$scope.changeDateEnd = function () {
-			if($scope.vacation.dateStart >= $scope.vacation.dateEnd) {
-				$scope.minDateOut = new Date(
-					$scope.vacation.dateStart.getFullYear(),
-					$scope.vacation.dateStart.getMonth(),
-					$scope.vacation.dateStart.getDate()+1
-				);
-				$scope.maxDateOut = new Date(
-					$scope.minDateOut.getFullYear(),
-					$scope.minDateOut.getMonth()+1,
-					$scope.minDateOut.getDate()
-				);
-				$scope.vacation.dateEnd = $scope.minDateOut;
-			}
-			$scope.fullDates();	
+		$scope.toggleRoom = function(item, list) {
+			var idx = list.indexOf(item);
+			if (idx > -1) { list.splice(idx, 1); }
+			else { list.push(item); }
+			// error message if no room selected
+			$scope.noRoomSelected = list.length === 0;
+			// update error message for availability
+			$scope.checkAvailability(); 
 		};
+		$scope.existsRoom = function(item, list) {
+			return list.indexOf(item) > -1;
+		};
+
+		//functions to send the form
 		$scope.newVacation = function () {
 			$scope.vacation = 
 				{
@@ -87,32 +67,30 @@ angular.module('passerelle2App')
 					notes:'', 
 				};
 		};
-		$scope.newRoomChoices = function () {
-			$scope.roomChoices = [true, true, true];
-		};
+
+		// initialize the variables
+		$scope.initSelectedRooms();
 		$scope.newVacation();
-		$scope.newRoomChoices();
-		$scope.changeDateEnd();
+		$scope.checkAvailability();
 		
 		$scope.addVacation = function () {
-            var vacationList = [];
             var i = 0;
-            for (i = 0; i < $scope.roomChoices.length; i++) {
-            	if ($scope.roomChoices[i]){
-            		$scope.vacation.room = i;
-            		vacationList.push(angular.copy($scope.vacation));
-            	}
-            }                
-            
-            for (i = 0; i < vacationList.length; i++) {
-            	bookingsService.getVacation().save(vacationList[i]);
-            }
 
+            // save vacations based on which rooms were selected
+            for (i = 0; i < $scope.selectedRooms.length; i++) {
+            	$scope.vacation.room = $scope.selectedRooms[i];
+            	resourcesService.getVacation().save($scope.vacation);
+            }                
+
+            // clean the form
             $scope.vacationForm.$setPristine();                
             
-            $scope.newVacation();
-            $scope.newRoomChoices();
+            // reinitialize the variables
+            $scope.initSelectedRooms();
+			$scope.newVacation();
+			$scope.checkAvailability();
 			
+			//reload the page/calendar to show the new dates
 			$state.forceReload();
 
 		};
