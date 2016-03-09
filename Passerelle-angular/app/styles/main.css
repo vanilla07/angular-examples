@@ -89,6 +89,11 @@ body {
 .panel {
   box-shadow: 1px 1px 12px #bfbfbf;
 }
+.navbar-default .navbar-nav > .active > a, 
+.navbar-default .navbar-nav > .active > a:hover, 
+.navbar-default .navbar-nav > .active > a:focus {
+  background-color: #323730;
+}
 
 /* Responsive: Portrait tablets and up */
 @media screen and (min-width: 768px) {
