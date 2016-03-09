@@ -1,3 +1,8 @@
+body {
+  background-color: #e6e6e6;
+  height: auto;
+}
+
 .nav, .pagination, .carousel, .panel-title a { 
   cursor: pointer; 
 }
@@ -34,7 +39,7 @@
 .footer {
   padding-top: 19px;
   color: #777;
-  border-top: 1px solid #e5e5e5;
+  border-top: 1px solid #bfbfbf;
 }
 
 .container-narrow > hr {
@@ -44,9 +49,9 @@
 /* Main marketing message and sign up button */
 .jumbotron {
   text-align: center;
-  border-bottom: 1px solid #e5e5e5;
+  border-bottom: 1px solid #bfbfbf;
   color: white;
-  background-color: #222;
+  background-color: #3e3f3a;;
 }
 
 .jumbotron .btn {
@@ -78,6 +83,12 @@
 .input {
   margin: 0;
 }
+.table {
+  background-color: white;
+}
+.panel {
+  box-shadow: 1px 1px 12px #bfbfbf;
+}
 
 /* Responsive: Portrait tablets and up */
 @media screen and (min-width: 768px) {
@@ -100,4 +111,7 @@
   .jumbotron {
     border-bottom: 0;
   }
+  .navbar {
+    border-radius: 0; 
+}
 }
