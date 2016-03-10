@@ -26,8 +26,9 @@
 	</div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
 
-<div class="content">
-	<div class="row">
+
+<div class="row">
+	<div class="row row-center">
 		<h1>Nouvelle réservation</h1>
 		<div class="col-xs-8 col-xs-offset-2" >
 			<div class="panel panel-default" >
@@ -39,11 +40,13 @@
 			</div>
 		</div>
 	</div>
+</div>
 
-	<div class="row" ng-include="calendarsTemplate"></div>
+<div class="row"><div ng-include="calendarsTemplate"  class="row row-center"></div></div>
 
-    <div class="row">
-    	<h1>Réservations</h1>
+<div class="row">
+	<div class="row row-center">
+		<h1>Réservations</h1>
     	<p class="lead">Rechercher un client: &nbsp;
     		<input type="text" ng-model="search" placeholder="Nom du client"></p>
     	<ul class="nav nav-tabs" >
@@ -75,5 +78,6 @@
 				</table>
 	        </div>
     	</div>
-    </div>   
-</div>
+    </div>
+</div>   
+

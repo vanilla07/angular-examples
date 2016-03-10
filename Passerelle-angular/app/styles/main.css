@@ -93,7 +93,7 @@ body {
   margin-top: 28px;
 }
 
-.marketing  .row-dashboard {
+.marketing  .row-dashboard, .row-center{
   max-width: 940px;
   margin-right: auto;
   margin-left: auto;
