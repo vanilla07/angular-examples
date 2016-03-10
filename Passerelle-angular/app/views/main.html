@@ -3,27 +3,69 @@
     <img src="images/logo-fr.png" alt="Logo la Passerelle des Corton"><br>  
   </p>
   <h3>Bienvenue dans l'espace administration !</h3>
+  <div class="row">  
+    <h4><strong>Prochains clients :</strong></h4> 
+    <div class="col-sm-4 next-res">
+      <h4>Chambre <strong>Premier Cru :</strong></h4>
+      <div class="col-sm-4">
+        <time datetime="2016-03-25" class="icon"> 
+          <em>Samedi</em>
+          <strong>Mars</strong>
+          <span>25</span>
+        </time>
+      </div>
+      <div class="col-sm-8">
+        <p><b>Marco Lasticaud :</b> <br/> 2 personne(s), <b>5 nuit(s).</b></p>
+        <a class="btn btn-warning" ui-sref="app.bookings">consulter</a>
+      </div>
+    </div>
+    <div class="col-sm-4 next-res"> 
+      <h4>Chambre <strong>Grand Cru :</strong></h4>
+      <div class="col-sm-4">
+        <time datetime="2016-04-04" class="icon"> 
+          <em>Vendredi</em>
+          <strong>Avr.</strong>
+          <span>4</span>
+        </time>
+      </div>
+      <div class="col-sm-8">
+        <p><b>Maya Labbaye :</b> <br/> 1 personne(s), <b>2 nuit(s).</b></p>
+        <a class="btn btn-warning" ui-sref="app.bookings">consulter</a>
+      </div>
+    </div>
+    <div class="col-sm-4 next-res">
+      <h4>Chambre <strong>Corton Charlemagne :</strong></h4>
+      <div class="col-sm-4">
+        <time datetime="2016-09-02" class="icon"> 
+          <em>Dimanche</em>
+          <strong>Sept.</strong> 
+          <span>2</span>
+        </time>
+      </div>
+      <div class="col-sm-8">
+        <p><b>Lepers Noël :</b> <br/> 1 personne(s), <b>1 nuit(s).</b></p>
+        <a class="btn btn-warning" ui-sref="app.bookings">consulter</a>
+      </div>
+    </div>
+  </div>
 </div>
 
 <div class="row marketing">
-    <!-- We'll also add some navigation: -->
-    
-    
-  <h4>Prochaine réservations</h4>
-  <p>
-    HTML5 Boilerplate is a professional front-end template for building fast, robust, and adaptable web apps or sites.
-  </p>
 
-  <h4>Gérer les réservations</h4>
-  <p>
-    AngularJS is a toolset for building the framework most suited to your application development.
-    <a ui-sref="app.bookings">Réservations</a>
-  </p>
+  <div class="row row-dashboard">
+    <h3>Gérer les réservations</h3>
+    <p>
+      Administrer les réservations, rechercher un client, consulter le calendrier.
+      <a class="btn btn-success" ui-sref="app.bookings">Réservations</a>
+    </p>
+  </div>
 
-  <h4>Gérer les jours de fermeture</h4>
-  <p>
-    AngularJS is a toolset for building the framework most suited to your application development.
-    <a ui-sref="app.vacation">Fermetures</a>
-  </p>
+  <div class="row row-dashboard">
+    <h3>Gérer les jours de fermeture</h3>
+    <p>
+      Gérer la fermeture temporaire d'une ou plusieurs chambres, consulter le calendrier de fermeture. 
+      <a class="btn btn-success" ui-sref="app.vacation">Fermetures</a></button>
+    </p>
+  </div>
 
 </div>
