@@ -41,23 +41,12 @@ angular
           }
 
       })
-
-      // route for the aboutus page
-      .state('app.about', {
-          url:'about',
-          views: {
-              'content@': {
-                  templateUrl : 'views/about.html',
-                  controller  : 'AboutCtrl'                  
-              }
-          }
-      })
       /// route for the reservation page
       .state('app.bookings', {
           url:'bookings',
           views: {
               'content@': {
-                  templateUrl : 'views/cal.html',
+                  templateUrl : 'views/add-booking.html',
                   controller  : 'CalCtrl'                  
               }
           }
@@ -68,6 +57,16 @@ angular
           views: {
               'content@': {
                   templateUrl : 'views/add-vacation.html',
+                  controller  : 'CalCtrl'                  
+              }
+          }
+      })
+      // route for the update booking page
+      .state('app.bookings.updatebooking', {
+          url:'update-booking',
+          views: {
+              'content@': {
+                  templateUrl : 'views/add-booking.html',
                   controller  : 'CalCtrl'                  
               }
           }

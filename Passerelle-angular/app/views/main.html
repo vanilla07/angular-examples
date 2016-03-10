@@ -1,3 +1,4 @@
+<ng-include src="modalTemplate"></ng-include>
 <div class="jumbotron">
   <p class="lead">
     <img src="images/logo-fr.png" alt="Logo la Passerelle des Corton"><br>  
@@ -16,7 +17,7 @@
       </div>
       <div class="col-sm-8">
         <p><b>Marco Lasticaud :</b> <br/> 2 personne(s), <b>5 nuit(s).</b></p>
-        <a class="btn btn-warning" ui-sref="app.bookings">consulter</a>
+        <button type="button" class="btn btn-warning btn-lg" data-toggle="modal" data-target="#myModal">consulter</button>
       </div>
     </div>
     <div class="col-sm-4 next-res"> 
@@ -30,7 +31,7 @@
       </div>
       <div class="col-sm-8">
         <p><b>Maya Labbaye :</b> <br/> 1 personne(s), <b>2 nuit(s).</b></p>
-        <a class="btn btn-warning" ui-sref="app.bookings">consulter</a>
+        <button type="button" class="btn btn-warning btn-lg" data-toggle="modal" data-target="#myModal">consulter</button>
       </div>
     </div>
     <div class="col-sm-4 next-res">
@@ -44,7 +45,7 @@
       </div>
       <div class="col-sm-8">
         <p><b>Lepers Noël :</b> <br/> 1 personne(s), <b>1 nuit(s).</b></p>
-        <a class="btn btn-warning" ui-sref="app.bookings">consulter</a>
+        <button type="button" class="btn btn-warning btn-lg" data-toggle="modal" data-target="#myModal">consulter</button>
       </div>
     </div>
   </div>

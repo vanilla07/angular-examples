@@ -5,7 +5,7 @@ angular.module('passerelle2App')
     .service('resourcesService',[ '$resource', 'baseURL', function( $resource, baseURL) {
 
         this.getBookings = function(){
-          return $resource(baseURL+':8090/bookings/:id',null,  {'update':{method:'PUT' }});
+          return $resource(baseURL+':8090/bookings/:bookingId', {bookingId:'@id'},  {'update':{method:'PUT' }});
         };
 
         this.getVacation = function(){
@@ -14,6 +14,55 @@ angular.module('passerelle2App')
 
         this.getDatesByRoom = function(roomId){
           return $resource(baseURL+':8090/calendar/'+roomId,null,  {'update':{method:'PUT' }});
+        };
+
+        this.getRooms = function(){
+            return [
+                    {
+                      id: 0,
+                      name: 'Premier Cru',
+                      price: 96
+                    },
+                    {
+                      id: 1,
+                      name: 'Grand Cru',
+                      price: 96
+                    },
+                    {
+                      id: 2,
+                      name: 'Corton Charlemagne',
+                      price: 96
+                    }
+                   ];
+        };
+
+        this.getChannels = function(){
+            return [
+                    {
+                      id: 0,
+                      text: 'lapasserelledescorton.fr',
+                      url: 'http://www.lapasserelledescorton.fr/'
+                    },
+                    {
+                      id: 1,
+                      text: 'booking.com',
+                      url: 'http://www.booking.com/index.fr.html'
+                    },
+                    {
+                      id: 2,
+                      text: 'airbnb.com',
+                      url: 'https://www.airbnb.fr/'
+                    }
+                 ];
+        };
+
+        this.getStatuses = function() {
+            return [
+                    {value: 0, text: 'En attente de paiement'},
+                    {value: 1, text: 'Accompte payé'},
+                    {value: 2, text: 'Réservation annulée'},
+                    {value: 3, text: 'Archivé'}
+                   ];
         };
 
     }])
