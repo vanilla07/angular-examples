@@ -1,6 +1,7 @@
-<div class="col-sm-6 col-sm-offset-3" ng-controller="BookCtrl">
-	<p>SUCCESS</p>
-	<form name="msgOk" ng-submit="msgOk()"> 
-		<button type="submit" class="btn btn-primary">Retour</button>
-	</form>
+<div class="alert alert-success alert-dismissible" role="alert">
+	<p>
+		<span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+		{{message}}
+		<a class="btn btn-success" ui-sref="app.bookings.add">OK</a>
+	</p>
 </div>

@@ -7,6 +7,11 @@ body {
   cursor: pointer; 
 }
 
+.row {
+  margin-right: auto;
+  margin-left: auto;
+}
+
 .browsehappy {
   margin: 0.2em 0;
   background: #ccc;
@@ -55,6 +60,7 @@ body {
   margin-right: auto;
   margin-left: auto;
   max-width: 940px;
+  border-radius: 5px;
 }
 
 .jumbotron .btn {
@@ -83,6 +89,8 @@ body {
   border-top: 1px solid #bfbfbf;
   margin-top: 25px;
   padding-top: 5px;
+  margin-left: 0;
+  margin-right: 0;
 }
 
 /* Supporting marketing content */

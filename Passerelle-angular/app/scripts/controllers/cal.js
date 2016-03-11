@@ -5,13 +5,11 @@ angular.module('passerelle2App')
 		$scope.$log = $log;
 		
 		// init partials
-		$scope.bookingTemplate = 'views/bookingForm.html';
 		$scope.vacationTemplate = 'views/vacationForm.html';
 		$scope.calendarsTemplate = 'views/calendars.html';
 		$scope.modalTemplate = 'views/booking-modal.html';
 		
 		// init $scope Resource values 
-		$scope.message = 'Loading ...';
         resourcesService.getBookings().query(
             function(response) {
                 $scope.bookings = response;
@@ -32,7 +30,9 @@ angular.module('passerelle2App')
 			room.vacations = resourcesService.getVacation().query();
 		}
 
-		// display behaviour values
+		// display behavioural values
+		$scope.rowTitle = 'Nouvelle réservation';
+		$scope.formTitle = 'Ajouter une réservation';
 		$scope.selectedBooking = '';
 		$scope.showBookings = false;
 		$scope.selectedRoom = '';

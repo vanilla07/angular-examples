@@ -37,39 +37,63 @@ angular.module('passerelle2App')
 
 		// functions to send the form
 		$scope.newBooking = function () {
-			$scope.booking = 
-				{
-					room:'',
-					name:'', 
-					email:'',
-					guestsNumber:2,
-					dateIn: $scope.minDate,
-					dateOut: $scope.minDateOut, 
-					notes:'', 
-					dateReservation:'',
-					status:0,
-					channel:0,
-					telephone:''
-				};
+			if (!$scope.isUpdate) {
+				$scope.booking = 
+					{
+						room:'',
+						name:'', 
+						email:'',
+						guestsNumber:2,
+						dateIn: $scope.minDate,
+						dateOut: $scope.minDateOut, 
+						notes:'', 
+						dateReservation:'',
+						status:0,
+						channel:0,
+						telephone:''
+					};
+			}
 		};
 		
 		$scope.newBooking();
-		//ligne à revoir
-		$scope.fullDates();
+		if ($scope.booking) {$scope.fullDates();}
+		//$log.info('message ' + $scope.isUpdate);
 
 		$scope.book = function () {
-                
-            $scope.booking.dateReservation = new Date().toISOString();
-            
-            resourcesService.getBookings().save($scope.booking);
-
-            $scope.bookings = resourcesService.getBookings().query();
-            
-            $scope.bookForm.$setPristine();                
-            
-            $scope.newBooking();
-			
-			$state.forceReload();
+        
+            // new booking
+            if (!$scope.isUpdate) {
+            	$scope.booking.dateReservation = new Date().toISOString();
+            	resourcesService.getBookings().save($scope.booking, 
+            		// recuperer le resultat de save (success ou error)
+            		function() {
+		                $scope.message = 'La réservation a bien été ajoutée'; 
+		                // succes on efface les donnees du formulaire
+	            		$scope.newBooking();
+		            },
+		            function(response) {
+		                $scope.message = 'Echec de l\'ajout de la réservation';
+		                $log.warn ('Error: '+response.status + ' ' + response.statusText);
+		            }
+            	); 
+	            $scope.bookings = resourcesService.getBookings().query();
+	            // TO-DO : trouver un moyen  propre pour mettre à jour le calendrier et la liste
+	            $state.go('app.bookings.formvalidation');
+	        }
+	        // update booking
+	        else {
+	        	var id = $scope.booking.id;
+	        	resourcesService.getBookings().update({ bookingId: id }, $scope.booking, 
+            		function() {
+		                $scope.message = 'La réservation a bien été modifiée'; 
+		            },
+		            function(response) {
+		                $scope.message = 'Echec de la modification de la réservation';
+		                $log.warn ('Error: '+response.status + ' ' + response.statusText);
+		            }
+		        );
+		        $state.go('app.updatebooking.formvalidation');
+	        }
 
 		};
 	}])

@@ -20,7 +20,7 @@ angular
     'ngMaterial'
   ])
   .config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $urlRouterProvider) {
-    
+
     $stateProvider
         
       // route for the home page
@@ -51,6 +51,32 @@ angular
               }
           }
       })
+      /// route for the reservation page
+      .state('app.bookings.add', {
+          templateUrl: 'views/booking-form.html'
+      })
+      /// route for the reservation page
+      .state('app.bookings.formvalidation', {
+          templateUrl: 'views/booking-success.html'
+      })
+      // route for the update booking page
+      .state('app.updatebooking', {
+          url:'update-booking/:bookingId',
+          views: {
+              'content@': {
+                  templateUrl : 'views/add-booking.html',
+                  controller  : 'UpdateBookingCtrl'                  
+              }
+          }
+      })
+      /// route for the reservation page
+      .state('app.updatebooking.form', {
+          templateUrl: 'views/booking-form.html'
+      })
+      /// route for the reservation page
+      .state('app.updatebooking.formvalidation', {
+          templateUrl: 'views/booking-success.html'
+      })
       /// route for the vacation page
       .state('app.vacation', {
           url:'vacation',
@@ -61,19 +87,11 @@ angular
               }
           }
       })
-      // route for the update booking page
-      .state('app.bookings.updatebooking', {
-          url:'update-booking',
-          views: {
-              'content@': {
-                  templateUrl : 'views/add-booking.html',
-                  controller  : 'CalCtrl'                  
-              }
-          }
-      })
       ;
     
     $urlRouterProvider.otherwise('/');
+
+    
   }])
   .config(function($provide) {
       $provide.decorator('$state', function($delegate, $stateParams) {
@@ -98,5 +116,10 @@ angular
         var m = moment(dateString, 'DD/MM/YYYY', true);
         return m.isValid() ? m.toDate() : new Date(NaN); 
     };
+  })
+  .run(function($rootScope) {
+    $rootScope.$on('$viewContentLoaded',function(){
+      $('html, body').animate({ scrollTop: 0 }, 200);
+    });
   })
 ;

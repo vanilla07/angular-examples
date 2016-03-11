@@ -1,22 +1,30 @@
-<ng-include src="modalTemplate"></ng-include>
+<ng-include src="modalTemplate" ng-if="!isUpdate"></ng-include>
+
+
+<div class="row" ng-if="isUpdate">
+	<div class="row row-center">
+		<ol class="breadcrumb">
+		  <li><a ui-sref="app">Accueil</a></li>
+		  <li><a ui-sref="app.bookings.add">Réservations</a></li>
+		  <li class="active">Modifier une réservation</li>
+		</ol>
+	</div>
+</div>
+
 <div class="row">
 	<div class="row row-center">
-		<h1>Nouvelle réservation</h1>
-		<div class="col-xs-8 col-xs-offset-2" >
-			<div class="panel panel-default" >
-				<div class="panel-heading">
-				  <h2 class="panel-title">Ajouter une réservation</h2>
-				</div>
-				<div class="panel-body" ng-include="bookingTemplate">
-				</div>
-			</div>
+		<h1>{{rowTitle}}</h1>
+		<div class="col-xs-8 col-xs-offset-2" ng-hide="isUpdate && retrieveError">
+			<!-- add/update form or success/error message -->
+			<div ui-view ng-controller="BookCtrl"></div>
 		</div>
+		<p ng-show="isUpdate && retrieveError">{{errorMessage}}. <a ui-sref="app.bookings.add">Retour aux réservations</a></p>
 	</div>
 </div>
 
 <div class="row"><div ng-include="calendarsTemplate"  class="row row-center"></div></div>
 
-<div class="row">
+<div class="row" ng-if="!isUpdate">
 	<div class="row row-center">
 		<h1>Réservations</h1>
     	<p class="lead">Rechercher un client: &nbsp;
@@ -26,10 +34,10 @@
             	<a ng-click="select('all')" aria-controls="all" role="tab">Toutes les réservations</a>
             </li>
             <li role="presentation" ng-class="{active:isSelected(room.id)}" ng-repeat="room in rooms">
-            	<a ng-click="select(room.id)" aria-controls="{{room.name}}" role="tab">{{room.name}}</a>
+            	<a ng-click="select(room.id)" aria-controls="{{room.name}}" role="tab">{{room.name}} </a>
             </li>
         </ul>
-        <div class="tab-content fade in active">
+        <div class="tab-content">
         	<br/>
 	        <div>
 	        	<table class="table table-striped table-bordered table-hover">
@@ -45,7 +53,7 @@
 				    	<td>{{rooms[booking.room].name}}</td>
 				    	<td>{{booking.name}}</td>
 				    	<td>Du <strong>{{booking.dateIn | date:'dd MMMM yyyy'}}</strong> au 
-				    		<strong>{{booking.dateOut | date:'dd MMMM yyyy'}}</strong></td>
+				    		<strong>{{booking.dateOut | date:'dd MMMM yyyy'}}</strong></td> 
 				  	</tr>
 				</table>
 	        </div>
