@@ -6,49 +6,24 @@
   <h3>Bienvenue dans l'espace administration !</h3>
   <div class="row">  
     <h4><strong>Prochains clients :</strong></h4>
-    <div class="col-sm-4 next-res">
-      <h4>Chambre <strong>Premier Cru :</strong></h4>
+    
+    <div class="col-sm-4 next-res" ng-repeat="next in nextBookings"> 
+      <h4>Chambre <strong>{{getRoomName(next.room)}} :</strong></h4>
       <div class="col-sm-4">
-        <time datetime="2016-03-25" class="icon"> 
-          <em>Samedi</em>
-          <strong>Mars</strong>
-          <span>25</span>
+        <time datetime="{{next.dateIn}}" class="icon"> 
+          <em>{{next.dateIn | date:'EEEE'}}</em>
+          <strong>{{next.dateIn | date:'MMM'}}</strong>
+          <span>{{next.dateIn | date:'d'}}</span>
         </time>
       </div>
       <div class="col-sm-8">
-        <p><b>Marco Lasticaud :</b> <br/> 2 personne(s), <b>5 nuit(s).</b></p>
-        <button type="button" class="btn btn-warning btn-lg" data-toggle="modal" data-target="#myModal">consulter</button>
-      </div>
-    </div>
-    <div class="col-sm-4 next-res"> 
-      <h4>Chambre <strong>Grand Cru :</strong></h4>
-      <div class="col-sm-4">
-        <time datetime="2016-04-04" class="icon"> 
-          <em>Vendredi</em>
-          <strong>Avr.</strong>
-          <span>4</span>
-        </time>
-      </div>
-      <div class="col-sm-8">
-        <p><b>Maya Labbaye :</b> <br/> 1 personne(s), <b>2 nuit(s).</b></p>
-        <button type="button" class="btn btn-warning btn-lg" data-toggle="modal" data-target="#myModal">consulter</button>
-      </div>
-    </div>
-    <div class="col-sm-4 next-res">
-      <h4>Chambre <strong>Corton Charlemagne :</strong></h4>
-      <div class="col-sm-4">
-        <time datetime="2016-09-02" class="icon"> 
-          <em>Dimanche</em>
-          <strong>Sept.</strong> 
-          <span>2</span>
-        </time>
-      </div>
-      <div class="col-sm-8">
-        <p><b>Lepers Noël :</b> <br/> 1 personne(s), <b>1 nuit(s).</b></p>
-        <button type="button" class="btn btn-warning btn-lg" data-toggle="modal" data-target="#myModal">consulter</button>
+        <p><b>{{next.name}} :</b> <br/> {{next.guestsNumber}} personne(s), 
+          <strong>{{ next.dateOut | amDifference : next.dateIn : 'days' }} nuit(s).</strong></p>
+        <button type="button" ng-click="selectBooking(next.id)" class="btn btn-warning btn-lg" data-toggle="modal" data-target="#myModal">consulter</button>
       </div>
     </div>
   </div>
+
 </div>
 
 <div class="row marketing">

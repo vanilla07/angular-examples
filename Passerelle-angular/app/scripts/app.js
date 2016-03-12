@@ -17,7 +17,8 @@ angular
     'ngAria',
     'ngAnimate',
     'ui.bootstrap',
-    'ngMaterial'
+    'ngMaterial',
+    'angularMoment'
   ])
   .config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $urlRouterProvider) {
 

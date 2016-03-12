@@ -21,14 +21,14 @@ angular.module('passerelle2App')
         );
         $scope.channels = resourcesService.getChannels();
 		$scope.statuses = resourcesService.getStatuses();
-        $scope.rooms = resourcesService.getRooms();
+        $scope.rooms = resourcesService.getRooms().query();
 
 		//sera inutile une fois le service REST à jour
-		for (var i = 0; i < $scope.rooms.length; i++) {
+		/*for (var i = 0; i < $scope.rooms.length; i++) {
 			var room = $scope.rooms[i];
 			room.bookings = resourcesService.getBookings().query();
 			room.vacations = resourcesService.getVacation().query();
-		}
+		}*/
 
 		// display behavioural values
 		$scope.rowTitle = 'Nouvelle réservation';

@@ -17,23 +17,7 @@ angular.module('passerelle2App')
         };
 
         this.getRooms = function(){
-            return [
-                    {
-                      id: 0,
-                      name: 'Premier Cru',
-                      price: 96
-                    },
-                    {
-                      id: 1,
-                      name: 'Grand Cru',
-                      price: 96
-                    },
-                    {
-                      id: 2,
-                      name: 'Corton Charlemagne',
-                      price: 96
-                    }
-                   ];
+            return $resource(baseURL+':8090/rooms/:id',null);
         };
 
         this.getChannels = function(){

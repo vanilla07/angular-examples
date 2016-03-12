@@ -13,7 +13,7 @@ angular.module('passerelle2App')
 		// init $scope Resource values 
         $scope.channels = resourcesService.getChannels();
 		$scope.statuses = resourcesService.getStatuses();
-        $scope.rooms = resourcesService.getRooms();
+        $scope.rooms = resourcesService.getRooms().query();
 		resourcesService.getBookings().get({bookingId:selectedId},
 			// success
 			function(response) {
