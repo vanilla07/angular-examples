@@ -3,7 +3,6 @@
 angular.module('passerelle2App')
     .controller('VacationCtrl', [ '$scope', 'resourcesService', 'formService', '$log', '$state', function($scope, resourcesService, formService, $log, $state) { 
 		$scope.$log = $log;
-		$scope.hideAvailibilityMsg = false;
 		$scope.noRoomSelected = false;
 		$scope.selectedRooms = [];
 		
@@ -15,21 +14,31 @@ angular.module('passerelle2App')
 		
 		var j = 0;
 		$scope.checkAvailability = function () {
-			$scope.hideAvailibilityMsg = true;
 			for (j = $scope.selectedRooms.length - 1; j >= 0; j--) {
-				var roomId = $scope.selectedRooms[j];
-				if (!formService.isPeriodAvailable($scope.rooms[roomId], $scope.vacation.dateStart, $scope.vacation.dateEnd)){
-					$scope.hideAvailibilityMsg = false;
-					$scope.roomName = $scope.rooms[j].name;
+				$scope.vacation.room = $scope.selectedRooms[j];
+				$scope.checkavailabilityByRoom($scope.vacation);
+				if (!$scope.hideAvailibilityMsg) {
+					$scope.roomName = resourcesService.getRoomName($scope.rooms, $scope.vacation.room);
 					break;
 				}
 			}
+		};
+		$scope.checkavailabilityByRoom = function (vacation) {
+			$scope.hideAvailibilityMsg = true;
+			if (vacation.room && vacation.dateStart) {
+				var date = vacation.dateStart.toISOString().substring(0, 10);
+				resourcesService.getRooms().get({id:vacation.room, date:date}).$promise.then( function(data) {
+					$scope.hideAvailibilityMsg = formService.isPeriodAvailable(data, vacation.dateStart, vacation.dateEnd);
+				});
+			}
+			$log.log ('hide : ' + $scope.hideAvailibilityMsg);
 		};
 
 		$scope.onChangeDateStart = function () {
 			//update dateEnd if needed
 			$scope.vacation.dateEnd = formService.updateDateEnd($scope.vacation.dateStart, $scope.vacation.dateEnd);
 			//update the limits of dateOut
+			formService.updateDateOutLimits($scope.vacation.dateStart);
 			$scope.minDateOut = formService.minDateOut;
 			$scope.maxDateOut = formService.maxDateOut;
 			//update error message
@@ -69,9 +78,11 @@ angular.module('passerelle2App')
 		};
 
 		// initialize the variables
-		$scope.initSelectedRooms();
-		$scope.newVacation();
-		$scope.checkAvailability();
+		$scope.rooms.$promise.then( function(){
+			$scope.initSelectedRooms();
+			$scope.newVacation();
+			$scope.checkAvailability();
+		});
 		
 		$scope.addVacation = function () {
             var i = 0;

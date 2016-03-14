@@ -39,7 +39,7 @@
 			        <div ng-message="mindate"><i class="fa fa-exclamation-triangle"></i> Cette date n'est pas disponible</div>
 		      	</div>
                 <div class="validation-messages" role="alert" ng-hide="hideAvailibilityMsg">
-                    <div><i class="fa fa-exclamation-triangle"></i> La période sélectionnée n'est pas disponible (chambre {{roomName}})</div>
+                    <div><i class="fa fa-exclamation-triangle"></i> La période sélectionnée n'est pas disponible (chambre {{getRoomName(rooms, vacation.room)}})</div>
                 </div>
             </div>
         </div>
@@ -55,7 +55,7 @@
                     <div ng-message="maxdate"><i class="fa fa-exclamation-triangle"></i> Période trop longue </div>
 		      	</div>
                 <div class="validation-messages" role="alert" ng-hide="hideAvailibilityMsg">
-                    <div><i class="fa fa-exclamation-triangle"></i> La période sélectionnée n'est pas disponible (chambre {{roomName}})</div>
+                    <div><i class="fa fa-exclamation-triangle"></i> La période sélectionnée n'est pas disponible (chambre {{getRoomName(rooms, vacation.room)}})</div>
                 </div>
             </div>
         </div>

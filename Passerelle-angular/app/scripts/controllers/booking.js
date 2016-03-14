@@ -2,62 +2,67 @@
 
 angular.module('passerelle2App')
     .controller('BookCtrl', [ '$scope', 'resourcesService', 'formService' ,'$log', '$state', function($scope, resourcesService, formService, $log, $state) { 
-		$scope.$log = $log;
-		$scope.hideAvailibilityMsg = false;
-		
+		$scope.$log = $log;		
 		$scope.minDate = formService.minDate;
-		//racalculate the limits of dateOut
+		//recalculate the limits of dateOut
 		formService.updateDateOutLimits($scope.minDate);
 		$scope.minDateOut = formService.minDateOut;
 		$scope.maxDateOut = formService.maxDateOut;
 		
-		$scope.fullDates = function () {
+		$scope.checkavailability = function (booking) {
 			$scope.hideAvailibilityMsg = true;
-			if ($scope.booking.room) {
-				if (!formService.isPeriodAvailable($scope.rooms[$scope.booking.room], $scope.booking.dateIn, $scope.booking.dateOut)){
-					$scope.hideAvailibilityMsg = false;
-					$scope.roomName = $scope.rooms[$scope.booking.room].name;
-				}
+			if (booking.room && booking.dateIn) {
+				$scope.roomName = resourcesService.getRoomName($scope.rooms, parseInt(booking.room));
+				var date = booking.dateIn.toISOString().substring(0, 10);
+				resourcesService.getRooms().get({id:booking.room, date:date}).$promise.then( function(data) {
+					$scope.hideAvailibilityMsg = formService.isPeriodAvailable(data, booking.dateIn, booking.dateOut);
+				});
 			}
+			$log.log ('hide : ' + $scope.hideAvailibilityMsg);
 		};
 
 		$scope.onChangeDateStart = function () {
 			//update dateOut if needed
 			$scope.booking.dateOut = formService.updateDateEnd($scope.booking.dateIn, $scope.booking.dateOut);
 			//update the limits of dateOut
+			formService.updateDateOutLimits($scope.booking.dateIn);
 			$scope.minDateOut = formService.minDateOut;
 			$scope.maxDateOut = formService.maxDateOut;
 			//update error message
-			$scope.fullDates();	
+			$scope.checkavailability($scope.booking);	
 		};
 
-		$scope.onChangeRoom = function () {
-			$scope.fullDates();
+		$scope.updateAvailability = function () {
+			$scope.checkavailability($scope.booking);
 		};
 
 		// functions to send the form
 		$scope.newBooking = function () {
-			if (!$scope.isUpdate) {
-				$scope.booking = 
-					{
-						room:'',
-						name:'', 
-						email:'',
-						guestsNumber:2,
-						dateIn: $scope.minDate,
-						dateOut: $scope.minDateOut, 
-						notes:'', 
-						dateReservation:'',
-						status:0,
-						channel:0,
-						telephone:''
-					};
-			}
+			$scope.booking = 
+				{
+					room:'',
+					name:'', 
+					email:'',
+					guestsNumber:2,
+					dateIn: $scope.minDate,
+					dateOut: $scope.minDateOut, 
+					notes:'', 
+					dateReservation:'',
+					status:0,
+					channel:0,
+					telephone:''
+				};
 		};
 		
-		$scope.newBooking();
-		if ($scope.booking) {$scope.fullDates();}
-		//$log.info('message ' + $scope.isUpdate);
+		if ($scope.isUpdate) {
+			$scope.booking.$promise.then(function(data){
+				$scope.checkavailability(data);
+			});
+		}
+		else {
+			$scope.newBooking();
+			$scope.checkavailability($scope.booking);
+		}
 
 		$scope.book = function () {
         
@@ -77,7 +82,7 @@ angular.module('passerelle2App')
 		            }
             	); 
 	            $scope.bookings = resourcesService.getBookings().query();
-	            // TO-DO : trouver un moyen  propre pour mettre à jour le calendrier et la liste
+	            // TODO : trouver un moyen  propre pour mettre à jour le calendrier et la liste
 	            $state.go('app.bookings.formvalidation');
 	        }
 	        // update booking

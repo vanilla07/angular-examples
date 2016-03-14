@@ -10,7 +10,7 @@
                     <label for="room" class="col-sm-5 control-label">Chambre *</label>
                     <div class="col-sm-7">
                         <md-input-container class="input">
-        			        <md-select ng-model="booking.room" required aria-label="book a room" name="room" ng-change="onChangeRoom()">
+        			        <md-select ng-model="booking.room" required aria-label="book a room" name="room" ng-change="updateAvailability()">
         			          <md-option ng-repeat="room in rooms" value="{{room.id}}">
         			            {{room.name}}
         			          </md-option>
@@ -90,7 +90,7 @@
                 <div class="form-group">
                     <label for="dateOut" class="col-sm-5 control-label">Date de départ *</label>
                     <div class="col-sm-7">
-                        <md-datepicker ng-model="booking.dateOut" md-placeholder="Entrez une date" required md-min-date="dateOut" name="dateOut" md-max-date="maxDateOut" ng-change="fullDates()"></md-datepicker>
+                        <md-datepicker ng-model="booking.dateOut" md-placeholder="Entrez une date" required md-min-date="minDateOut" name="dateOut" md-max-date="maxDateOut" ng-change="updateAvailability()"></md-datepicker>
                         <div class="validation-messages" ng-messages="bookForm.dateOut.$error" role="alert">
         			        <div ng-message="valid"><i class="fa fa-exclamation-triangle"></i> Veuillez entrer une date valide ("jj/mm/aaaa")</div>
         			        <div ng-message="required"><i class="fa fa-exclamation-triangle"></i> Ce champ date est obligatoire</div>

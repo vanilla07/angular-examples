@@ -16,6 +16,7 @@ angular.module('passerelle2App')
     ];
 
     var today = new Date();
+    // format date to '2016-10-15'
     var date = today.toISOString().substring(0, 10);
     // Resource variables
     $scope.nextBookings = [];
@@ -39,19 +40,13 @@ angular.module('passerelle2App')
       }
     });
 
+    $scope.getRoomName = resourcesService.getRoomName;
+
     $scope.selectBooking = function(id) {
       for (var i = 0; i < $scope.nextBookings.length; i++) {
         if (id === $scope.nextBookings[i].id) {
           $scope.selectedBooking = $scope.nextBookings[i];
           break;
-        }
-      }
-    };
-
-    $scope.getRoomName = function(id) {
-      for (var i = 0; i < $scope.rooms.length; i++) {
-        if (id === $scope.rooms[i].id) {
-          return $scope.rooms[i].name;
         }
       }
     };

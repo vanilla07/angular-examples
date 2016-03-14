@@ -16,6 +16,8 @@ angular.module('passerelle2App')
           return $resource(baseURL+':8090/calendar/'+roomId,null,  {'update':{method:'PUT' }});
         };
 
+        // get Rooms : resourcesService.getRooms().query({date:date});
+        // get one room: resourcesService.getRooms().query({id:id, date:date});
         this.getRooms = function(){
             return $resource(baseURL+':8090/rooms/:id',null);
         };
@@ -47,6 +49,14 @@ angular.module('passerelle2App')
                     {value: 2, text: 'Réservation annulée'},
                     {value: 3, text: 'Archivé'}
                    ];
+        };
+
+        this.getRoomName = function(rooms, id) {
+          for (var i = 0; i < rooms.length; i++) {
+            if (id === rooms[i].id) {
+              return rooms[i].name;
+            }
+          }
         };
 
     }])
@@ -81,20 +91,16 @@ angular.module('passerelle2App')
         this.isPeriodAvailable = function(roomDatas, dateIn, dateOut) {
             var result = true;
             for (var i = roomDatas.bookings.length - 1; i >= 0; i--) {
-                if (roomDatas.id === roomDatas.bookings[i].room) {
-                    if (!this.isRoomAvailable(dateIn, dateOut, new Date(roomDatas.bookings[i].dateIn), new Date(roomDatas.bookings[i].dateOut))) {
-                        result = false;
-                        break;
-                    }
-                }
+              if (!this.isRoomAvailable(dateIn, dateOut, new Date(roomDatas.bookings[i].dateIn), new Date(roomDatas.bookings[i].dateOut))) {
+                  result = false;
+                  break;
+              }
             }
             for (i = roomDatas.vacations.length - 1; i >= 0; i--) {
-                if (roomDatas.id === roomDatas.vacations[i].room) {
-                    if (!this.isRoomAvailable(dateIn, dateOut, new Date(roomDatas.vacations[i].dateStart), new Date(roomDatas.vacations[i].dateEnd))) {
-                        result = false;
-                        break;
-                    }
-                } 
+              if (!this.isRoomAvailable(dateIn, dateOut, new Date(roomDatas.vacations[i].dateIn), new Date(roomDatas.vacations[i].dateOut))) {
+                  result = false;
+                  break;
+              }
             }
             return result;
         };

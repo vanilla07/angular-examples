@@ -8,7 +8,7 @@
     <h4><strong>Prochains clients :</strong></h4>
     
     <div class="col-sm-4 next-res" ng-repeat="next in nextBookings"> 
-      <h4>Chambre <strong>{{getRoomName(next.room)}} :</strong></h4>
+      <h4>Chambre <strong>{{getRoomName(rooms, next.room)}} :</strong></h4>
       <div class="col-sm-4">
         <time datetime="{{next.dateIn}}" class="icon"> 
           <em>{{next.dateIn | date:'EEEE'}}</em>

@@ -5,9 +5,13 @@ angular.module('passerelle2App')
 		$scope.$log = $log;
 		
 		// init partials
-		$scope.vacationTemplate = 'views/vacationForm.html';
+		$scope.vacationTemplate = 'views/vacation-form.html';
 		$scope.calendarsTemplate = 'views/calendars.html';
 		$scope.modalTemplate = 'views/booking-modal.html';
+
+		var today = new Date();
+	    // format date to '2016-10-15'
+	    var date = today.toISOString().substring(0, 10);
 		
 		// init $scope Resource values 
         resourcesService.getBookings().query(
@@ -21,14 +25,9 @@ angular.module('passerelle2App')
         );
         $scope.channels = resourcesService.getChannels();
 		$scope.statuses = resourcesService.getStatuses();
-        $scope.rooms = resourcesService.getRooms().query();
+        $scope.rooms = resourcesService.getRooms().query({date:date});
 
-		//sera inutile une fois le service REST à jour
-		/*for (var i = 0; i < $scope.rooms.length; i++) {
-			var room = $scope.rooms[i];
-			room.bookings = resourcesService.getBookings().query();
-			room.vacations = resourcesService.getVacation().query();
-		}*/
+		$scope.getRoomName = resourcesService.getRoomName;
 
 		// display behavioural values
 		$scope.rowTitle = 'Nouvelle réservation';
