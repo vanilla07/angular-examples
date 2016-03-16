@@ -1,7 +1,8 @@
 'use strict';
 
 angular.module('passerelle2App')
-    .controller('BookCtrl', [ '$scope', 'resourcesService', 'formService' ,'$log', '$state', function($scope, resourcesService, formService, $log, $state) { 
+    .controller('BookCtrl', [ '$scope', 'resourcesService', 'formService' ,'$log', '$state', '$mdDialog', 
+    function($scope, resourcesService, formService, $log, $state, $mdDialog) { 
 		$scope.$log = $log;		
 		$scope.minDate = formService.minDate;
 		//recalculate the limits of dateOut
@@ -64,6 +65,20 @@ angular.module('passerelle2App')
 			$scope.checkavailability($scope.booking);
 		}
 
+		// TODO: essayer de factoriser
+	    $scope.showDialog = function(){
+	    	$mdDialog.show(
+		      $mdDialog.alert()
+		        .parent(angular.element(document.body))
+		        .clickOutsideToClose(true)
+		        .title('Confirmation')
+		        .textContent($scope.message)
+		        .ariaLabel('Alert Message')
+		        .ok('OK')
+		        .targetEvent($state.reload())
+		    );
+	    };
+
 		$scope.book = function () {
         
             // new booking
@@ -75,15 +90,17 @@ angular.module('passerelle2App')
 		                $scope.message = 'La réservation a bien été ajoutée'; 
 		                // succes on efface les donnees du formulaire
 	            		$scope.newBooking();
+	            		//affichage du message de confirmation
+	            		$scope.showDialog();
 		            },
-		            function(response) {
+		            function() {
 		                $scope.message = 'Echec de l\'ajout de la réservation';
-		                $log.warn ('Error: '+response.status + ' ' + response.statusText);
+		                //affichage message de confirmation
+		                $scope.showDialog();
 		            }
             	); 
 	            $scope.bookings = resourcesService.getBookings().query();
 	            // TODO : trouver un moyen  propre pour mettre à jour le calendrier et la liste
-	            $state.go('app.bookings.formvalidation');
 	        }
 	        // update booking
 	        else {
@@ -91,13 +108,14 @@ angular.module('passerelle2App')
 	        	resourcesService.getBookings().update({ bookingId: id }, $scope.booking, 
             		function() {
 		                $scope.message = 'La réservation a bien été modifiée'; 
+		                $scope.showDialog();
 		            },
 		            function(response) {
 		                $scope.message = 'Echec de la modification de la réservation';
 		                $log.warn ('Error: '+response.status + ' ' + response.statusText);
+		                $scope.showDialog();
 		            }
 		        );
-		        $state.go('app.updatebooking.formvalidation');
 	        }
 
 		};

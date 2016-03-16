@@ -18,7 +18,8 @@ angular
     'ngAnimate',
     'ui.bootstrap',
     'ngMaterial',
-    'angularMoment'
+    'angularMoment',
+    'angular-confirm'
   ])
   .config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $urlRouterProvider) {
 
@@ -44,25 +45,25 @@ angular
       })
       /// route for the reservation page
       .state('app.bookings', {
+          abstract: true,
           url:'bookings',
           views: {
               'content@': {
                   templateUrl : 'views/add-booking.html',
                   controller  : 'CalCtrl'                  
               }
-          }
-      })
-      /// route for the reservation page
-      .state('app.bookings.add', {
+          },
           templateUrl: 'views/booking-form.html'
       })
       /// route for the reservation page
-      .state('app.bookings.formvalidation', {
-          templateUrl: 'views/booking-success.html'
+      .state('app.bookings.add', {
+          url:'/add',
+          templateUrl: 'views/booking-form.html'
       })
       // route for the update booking page
       .state('app.updatebooking', {
-          url:'update-booking/:bookingId',
+          abstract: true,
+          url:'booking/:bookingId',
           views: {
               'content@': {
                   templateUrl : 'views/add-booking.html',
@@ -72,11 +73,8 @@ angular
       })
       /// route for the reservation page
       .state('app.updatebooking.form', {
+          url: '/update',
           templateUrl: 'views/booking-form.html'
-      })
-      /// route for the reservation page
-      .state('app.updatebooking.formvalidation', {
-          templateUrl: 'views/booking-success.html'
       })
       /// route for the vacation page
       .state('app.vacation', {

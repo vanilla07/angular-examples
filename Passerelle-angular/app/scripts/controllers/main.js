@@ -31,12 +31,16 @@ angular.module('passerelle2App')
         var booking = data[i].bookings[0];
         // si elle existe : on la sauvegarde pour affichage
         if (booking) {
-          var id = booking.id;
-          var fullBooking = resourcesService.getBookings().get({bookingId:id});
-          fullBooking.roomName = data[i].name;
+          var fullBooking = resourcesService.getBookings().get({bookingId:booking.id});
+          fullBooking.$promise.roomName = data[i].name;
           $scope.nextBookings.push(fullBooking);
         }
-        // TODO: Sinon afficher un message disant que pour cette chambre il n'y a pas de résa
+        else {
+          var emptyBooking = {};
+          emptyBooking.roomName = data[i].name;
+          emptyBooking.isEmpty = true;
+          $scope.nextBookings.push(emptyBooking);
+        }
       }
     });
 

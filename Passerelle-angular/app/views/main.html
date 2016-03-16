@@ -8,18 +8,24 @@
     <h4><strong>Prochains clients :</strong></h4>
     
     <div class="col-sm-4 next-res" ng-repeat="next in nextBookings"> 
-      <h4>Chambre <strong>{{getRoomName(rooms, next.room)}} :</strong></h4>
-      <div class="col-sm-4">
-        <time datetime="{{next.dateIn}}" class="icon"> 
-          <em>{{next.dateIn | date:'EEEE'}}</em>
-          <strong>{{next.dateIn | date:'MMM'}}</strong>
-          <span>{{next.dateIn | date:'d'}}</span>
-        </time>
+      <div class="res-empty" ng-if="next.isEmpty">
+        <h4>Chambre <strong>{{next.roomName}} :</strong></h4>
+        <p><strong>Pas de réservation prochainement.</strong></p>
       </div>
-      <div class="col-sm-8">
-        <p><b>{{next.name}} :</b> <br/> {{next.guestsNumber}} personne(s), 
-          <strong>{{ next.dateOut | amDifference : next.dateIn : 'days' }} nuit(s).</strong></p>
-        <button type="button" ng-click="selectBooking(next.id)" class="btn btn-warning btn-lg" data-toggle="modal" data-target="#myModal">consulter</button>
+      <div ng-if="!next.isEmpty">
+        <h4>Chambre <strong>{{getRoomName(rooms, next.room)}} :</strong></h4>
+        <div class="col-xs-4">
+          <time datetime="{{next.dateIn}}" class="icon"> 
+            <em>{{next.dateIn | date:'EEEE'}}</em>
+            <strong>{{next.dateIn | date:'MMM'}}</strong>
+            <span>{{next.dateIn | date:'d'}}</span>
+          </time>
+        </div>
+        <div class="col-xs-8">
+          <p><b>{{next.name}} :</b> <br/> {{next.guestsNumber}} personne(s), 
+            <strong>{{ next.dateOut | amDifference : next.dateIn : 'days' }} nuit(s).</strong></p>
+          <button type="button" ng-click="selectBooking(next.id)" class="btn btn-warning btn-lg" data-toggle="modal" data-target="#myModal">consulter</button>
+        </div>
       </div>
     </div>
   </div>

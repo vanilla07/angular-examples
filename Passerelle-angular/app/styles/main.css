@@ -142,6 +142,10 @@ body {
 .next-res .btn {
     padding: 3px 8px;
 }
+div.res-empty {
+  min-height: 60px;
+  line-height: 60px;
+}
 
 /* time icon */
 time.icon {
@@ -187,7 +191,6 @@ time.icon span {
   color: #2f2f2f;
 }
 /* end time icon*/
-
 
 /* Responsive: Portrait tablets and up */
 @media screen and (min-width: 768px) {
