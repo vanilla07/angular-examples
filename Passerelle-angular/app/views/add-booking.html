@@ -16,7 +16,7 @@
 		<h1>{{rowTitle}}</h1>
 		<div class="col-xs-8 col-xs-offset-2" ng-hide="isUpdate && retrieveError">
 			<!-- add/update form or success/error message -->
-			<div ui-view ng-controller="BookCtrl">TEST</div>
+			<div ui-view ng-controller="BookCtrl"></div>
 		</div>
 		<p ng-show="isUpdate && retrieveError">{{errorMessage}}. <a ui-sref="app.bookings.add">Retour aux réservations</a></p>
 	</div>

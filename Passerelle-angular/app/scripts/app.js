@@ -43,7 +43,8 @@ angular
           }
 
       })
-      /// route for the reservation page
+
+      /// BOOKINGS
       .state('app.bookings', {
           abstract: true,
           url:'bookings',
@@ -55,12 +56,11 @@ angular
           },
           templateUrl: 'views/booking-form.html'
       })
-      /// route for the reservation page
+      /// route for the add reservation page
       .state('app.bookings.add', {
           url:'/add',
           templateUrl: 'views/booking-form.html'
       })
-      // route for the update booking page
       .state('app.updatebooking', {
           abstract: true,
           url:'booking/:bookingId',
@@ -71,13 +71,16 @@ angular
               }
           }
       })
-      /// route for the reservation page
+      /// route for the update booking page
       .state('app.updatebooking.form', {
           url: '/update',
           templateUrl: 'views/booking-form.html'
       })
-      /// route for the vacation page
+      /// END BOOKINGS
+
+      /// VACATION
       .state('app.vacation', {
+          abstract: true,
           url:'vacation',
           views: {
               'content@': {
@@ -86,6 +89,27 @@ angular
               }
           }
       })
+      /// route for the add vacation page
+      .state('app.vacation.add', {
+          url:'/add',
+          templateUrl: 'views/vacation-form.html'
+      })
+      .state('app.updateVacation', {
+          abstract: true,
+          url:'vacation/:vacationId',
+          views: {
+              'content@': {
+                  templateUrl : 'views/add-vacation.html',
+                  controller  : 'UpdateVacationCtrl'                  
+              }
+          }
+      })
+      /// route for the update vacation page
+      .state('app.updateVacation.form', {
+          url: '/update',
+          templateUrl: 'views/vacation-form.html'
+      })
+      /// END VACATION
       ;
     
     $urlRouterProvider.otherwise('/');

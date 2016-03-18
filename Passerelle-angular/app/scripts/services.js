@@ -9,17 +9,18 @@ angular.module('passerelle2App')
         };
 
         this.getVacation = function(){
-          return $resource(baseURL+':8090/vacation/:id',null,  {'update':{method:'PUT' }});
+          return $resource(baseURL+':8090/vacation/:vacationId', {vacationId:'@id'} ,  {'update':{method:'PUT' }});
         };
 
+        // TODO uniformiser : pas d'utilisation de parametre
         this.getDatesByRoom = function(roomId){
-          return $resource(baseURL+':8090/calendar/'+roomId,null,  {'update':{method:'PUT' }});
+          return $resource(baseURL+':8090/calendar/'+roomId, null);
         };
 
         // get Rooms : resourcesService.getRooms().query({date:date});
         // get one room: resourcesService.getRooms().query({id:id, date:date});
         this.getRooms = function(){
-            return $resource(baseURL+':8090/rooms/:id',null);
+            return $resource(baseURL+':8090/rooms/:id', null);
         };
 
         this.getChannels = function(){
@@ -61,27 +62,44 @@ angular.module('passerelle2App')
 
     }])
     .service('formService', function() {
-      
-        var now = new Date();
-        this.minDate = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-        
-        this.minDateOut = this.minDate;
-        this.maxDateOut = this.minDate;
+        var timezone = 'Europe/Paris';
+
+        this.getMinDate = function() {
+          // now moment in FR
+          var now = moment().tz(timezone);
+          // normal minDate
+          var minDate = now.toDate();
+          // the limit moment to book a room : 22h in France
+          var limitDate = moment.tz(minDate.toISOString().substring(0, 10)+'T22', timezone);
+          // if now is after the limit moment, then the min Date should be the day after
+          if (minDate.getTime() > limitDate.toDate().getTime()) {
+            minDate = new Date(minDate.getFullYear(), minDate.getMonth(), minDate.getDate()+1 );
+          }
+          else {
+            minDate = new Date(minDate.getFullYear(), minDate.getMonth(), minDate.getDate());
+          }
+          return minDate;
+        };
 
         this.updateDateOutLimits = function (dateIn) {
-            this.minDateOut = new Date( dateIn.getFullYear(), dateIn.getMonth(), dateIn.getDate()+1 );   
-            this.maxDateOut = new Date( this.minDateOut.getFullYear(), this.minDateOut.getMonth()+1, this.minDateOut.getDate() ); 
+          this.minDateOut = new Date( dateIn.getFullYear(), dateIn.getMonth(), dateIn.getDate()+1 );   
+          this.maxDateOut = new Date( this.minDateOut.getFullYear(), this.minDateOut.getMonth()+1, this.minDateOut.getDate() ); 
+        };
+
+        this.getRealDate = function (stringDate) {
+          var date = moment.tz(stringDate, timezone); 
+          return new Date ( date.year(), date.month(), date.date() );
         };
 
         this.updateDateEnd = function(dateStart, dateEnd){
-            this.updateDateOutLimits(dateStart);
-            if(dateStart >= dateEnd) {
-                dateEnd = this.minDateOut;
-            }
-            if(dateEnd > this.maxDateOut) {
-                dateEnd = this.maxDateOut;
-            }
-            return dateEnd;
+          this.updateDateOutLimits(dateStart);
+          if(dateStart >= dateEnd) {
+              dateEnd = this.minDateOut;
+          }
+          if(dateEnd > this.maxDateOut) {
+              dateEnd = this.maxDateOut;
+          }
+          return dateEnd;
         };
 
         this.isRoomAvailable = function(dateInA, dateOutA, dateInB, dateOutB) {
@@ -91,13 +109,13 @@ angular.module('passerelle2App')
         this.isPeriodAvailable = function(roomDatas, dateIn, dateOut) {
             var result = true;
             for (var i = roomDatas.bookings.length - 1; i >= 0; i--) {
-              if (!this.isRoomAvailable(dateIn, dateOut, new Date(roomDatas.bookings[i].dateIn), new Date(roomDatas.bookings[i].dateOut))) {
+              if (!this.isRoomAvailable(dateIn, dateOut, this.getRealDate(roomDatas.bookings[i].dateIn), this.getRealDate(roomDatas.bookings[i].dateOut))) {
                   result = false;
                   break;
               }
             }
             for (i = roomDatas.vacations.length - 1; i >= 0; i--) {
-              if (!this.isRoomAvailable(dateIn, dateOut, new Date(roomDatas.vacations[i].dateIn), new Date(roomDatas.vacations[i].dateOut))) {
+              if (!this.isRoomAvailable(dateIn, dateOut, this.getRealDate(roomDatas.vacations[i].dateIn), this.getRealDate(roomDatas.vacations[i].dateOut))) {
                   result = false;
                   break;
               }
@@ -105,5 +123,39 @@ angular.module('passerelle2App')
             return result;
         };
 
+        this.removeVacationFromDates = function(roomDatas, dateIn, dateOut) {
+          var index;
+          for (var i = 0; i < roomDatas.vacations.length; i++) {
+            if (this.getRealDate(roomDatas.vacations[i].dateIn).getTime() === dateIn.getTime() &&
+                this.getRealDate(roomDatas.vacations[i].dateOut).getTime() === dateOut.getTime() ) {
+              index = i;
+              break;
+            }
+          }
+          if (index) {
+            roomDatas.vacations.splice(index, 1);
+          }
+          return roomDatas;
+        };
+
+        this.removeBookingFromDates = function(roomDatas, dateIn, dateOut) {
+          var isPresent = false;
+          var i = 0;
+          for (i = 0; i < roomDatas.bookings.length; i++) {
+            if (this.getRealDate(roomDatas.bookings[i].dateIn).getTime() === dateIn.getTime() &&
+                this.getRealDate(roomDatas.bookings[i].dateOut).getTime() === dateOut.getTime() ) {
+              isPresent = true;
+              break;
+            }
+          }
+          if (isPresent) {
+            roomDatas.bookings.splice(i, 1);
+          }
+          return roomDatas;
+        };
+
+        this.minDate = this.getMinDate();
+        this.minDateOut = this.minDate;
+        this.maxDateOut = this.minDate;
     })
 ;

@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('passerelle2App')
-    .controller('UpdateBookingCtrl', [ '$scope', 'resourcesService', '$stateParams', '$log', function($scope, resourcesService, $stateParams, $log) { 
+    .controller('UpdateBookingCtrl', [ '$scope', 'resourcesService', 'formService', '$stateParams', '$log', function($scope, resourcesService, formService, $stateParams, $log) { 
        	var selectedId = $stateParams.bookingId;
     	$scope.isUpdate = true;
     	$scope.rowTitle = 'Modifier une réservation';
@@ -22,12 +22,12 @@ angular.module('passerelle2App')
         $scope.booking.$promise.then( 
             // success
             function(response) {
-                var dateIn = new Date(response.dateIn);
-                var dateOut = new Date(response.dateOut);
+                var dateIn = formService.getRealDate (response.dateIn);
+                var dateOut = formService.getRealDate (response.dateOut);
                 $scope.booking = response;
                 $scope.booking.dateIn = dateIn;
                 $scope.booking.dateOut = dateOut;
-                $scope.rowTitle = 'Réservation n° ' + selectedId;
+                $scope.rowTitle = 'Réservation n° ' + selectedId; 
             },
             // fail
             function(response) {

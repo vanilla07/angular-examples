@@ -5,7 +5,6 @@ angular.module('passerelle2App')
 		$scope.$log = $log;
 		
 		// init partials
-		$scope.vacationTemplate = 'views/vacation-form.html';
 		$scope.calendarsTemplate = 'views/calendars.html';
 		$scope.modalTemplate = 'views/booking-modal.html';
 

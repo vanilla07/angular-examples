@@ -16,10 +16,12 @@ angular.module('passerelle2App')
 				$scope.roomName = resourcesService.getRoomName($scope.rooms, parseInt(booking.room));
 				var date = booking.dateIn.toISOString().substring(0, 10);
 				resourcesService.getRooms().get({id:booking.room, date:date}).$promise.then( function(data) {
+					if ($scope.isUpdate) {
+						data = formService.removeBookingFromDates(data, $scope.oldDateIn, $scope.oldDateOut);
+					}
 					$scope.hideAvailibilityMsg = formService.isPeriodAvailable(data, booking.dateIn, booking.dateOut);
 				});
 			}
-			$log.log ('hide : ' + $scope.hideAvailibilityMsg);
 		};
 
 		$scope.onChangeDateStart = function () {
@@ -57,6 +59,8 @@ angular.module('passerelle2App')
 		
 		if ($scope.isUpdate) {
 			$scope.booking.$promise.then(function(data){
+				$scope.oldDateIn = data.dateIn;
+				$scope.oldDateOut = data.dateOut;
 				$scope.checkavailability(data);
 			});
 		}
