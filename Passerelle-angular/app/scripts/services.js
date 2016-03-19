@@ -81,6 +81,13 @@ angular.module('passerelle2App')
           return minDate;
         };
 
+        this.getNowISO = function(){
+          // now moment in FR
+          var now = moment().tz(timezone);
+          var nowISO = now.toDate().toISOString();
+          return nowISO.substring(0, 10);
+        };
+
         this.updateDateOutLimits = function (dateIn) {
           this.minDateOut = new Date( dateIn.getFullYear(), dateIn.getMonth(), dateIn.getDate()+1 );   
           this.maxDateOut = new Date( this.minDateOut.getFullYear(), this.minDateOut.getMonth()+1, this.minDateOut.getDate() ); 
@@ -103,7 +110,8 @@ angular.module('passerelle2App')
         };
 
         this.isRoomAvailable = function(dateInA, dateOutA, dateInB, dateOutB) {
-            return ( (dateInA > dateInB && dateInA >= dateOutB) || (dateInB > dateInA && dateInB >= dateOutA) );
+            return ( (dateInA.getTime() > dateInB.getTime() && dateInA.getTime() >= dateOutB.getTime()) || 
+                      (dateInB.getTime() > dateInA.getTime() && dateInB.getTime() >= dateOutA.getTime()) );
         };
 
         this.isPeriodAvailable = function(roomDatas, dateIn, dateOut) {

@@ -1,7 +1,8 @@
 'use strict';
 
 angular.module('passerelle2App')
-    .controller('VacationCtrl', [ '$scope', 'resourcesService', 'formService', '$log', '$state', function($scope, resourcesService, formService, $log, $state) { 
+    .controller('VacationCtrl', [ '$scope', 'resourcesService', 'formService', '$log', '$state', '$mdDialog', 
+    	function($scope, resourcesService, formService, $log, $state, $mdDialog) { 
 		$scope.$log = $log;
 		$scope.noRoomSelected = false;
 		$scope.selectedRooms = [];
@@ -28,10 +29,12 @@ angular.module('passerelle2App')
 			if (vacation.room && vacation.dateStart) {
 				var date = vacation.dateStart.toISOString().substring(0, 10);
 				resourcesService.getRooms().get({id:vacation.room, date:date}).$promise.then( function(data) {
+					if ($scope.isUpdate) {
+						data = formService.removeBookingFromDates(data, $scope.oldDateIn, $scope.oldDateOut);
+					}
 					$scope.hideAvailibilityMsg = formService.isPeriodAvailable(data, vacation.dateStart, vacation.dateEnd);
 				});
 			}
-			$log.log ('hide : ' + $scope.hideAvailibilityMsg);
 		};
 
 		$scope.onChangeDateStart = function () {
@@ -80,29 +83,96 @@ angular.module('passerelle2App')
 		// initialize the variables
 		$scope.rooms.$promise.then( function(){
 			$scope.initSelectedRooms();
+		});
+
+		if ($scope.isUpdate) {
+			$scope.vacation.$promise.then(function(data){
+				$scope.oldDateIn = data.dateIn;
+				$scope.oldDateOut = data.dateOut;
+				$scope.checkavailabilityByRoom(data);
+			});
+		}
+		else {
 			$scope.newVacation();
 			$scope.checkAvailability();
-		});
+		}
+
+		// TODO: essayer de factoriser
+	    $scope.showDialog = function(){
+	    	$mdDialog.show(
+		      $mdDialog.alert()
+		        .parent(angular.element(document.body))
+		        .clickOutsideToClose(true)
+		        .title('Confirmation')
+		        .textContent($scope.message)
+		        .ariaLabel('Alert Message')
+		        .ok('OK')
+		        .targetEvent($state.reload())
+		    );
+	    };
 		
+	    $scope.addVacationByRoom = function (vacation, roomName) {
+	    	var message = '';
+	    	resourcesService.getVacation().save(vacation,
+        		// get result of save action (success ou error)
+        		function() {
+	                message = 'La fermeture a bien été prise en compte pour la chambre ' + roomName + '\n'; 
+	                // succes : we clean the form datas
+            		$scope.newVacation();
+	            },
+	            function() {
+	                message = 'Echec de la fermeture pour la chambre ' + roomName + '\n';
+	            }
+            );
+            return message;
+	    };
+
+	    // TODO : à utiliser plus tard
+	    $scope.updateVacationByRoom = function (vacation, roomName) {
+	    	var message = '';
+	    	resourcesService.getVacation().save(vacation,
+        		// get result of save action (success ou error)
+        		function() {
+	                message = 'La fermeture a bien été prise en compte pour la chambre ' + roomName + '\n'; 
+	                // succes : we clean the form datas
+            		$scope.newVacation();
+	            },
+	            function() {
+	                message = 'Echec de la fermeture pour la chambre ' + roomName + '\n';
+	            }
+            );
+            return message;
+	    };
+
 		$scope.addVacation = function () {
             var i = 0;
-
-            // save vacations based on which rooms were selected
-            for (i = 0; i < $scope.selectedRooms.length; i++) {
-            	$scope.vacation.room = $scope.selectedRooms[i];
-            	resourcesService.getVacation().save($scope.vacation);
-            }                
-
-            // clean the form
-            $scope.vacationForm.$setPristine();                
-            
-            // reinitialize the variables
-            $scope.initSelectedRooms();
-			$scope.newVacation();
-			$scope.checkAvailability();
-			
-			//reload the page/calendar to show the new dates
-			$state.forceReload();
+             // new booking
+            if (!$scope.isUpdate) {
+            	$scope.message = '';
+	            // save vacations based on which rooms were selected
+	            for (i = 0; i < $scope.selectedRooms.length; i++) {
+	            	$scope.vacation.room = $scope.selectedRooms[i];
+	            	var roomName = resourcesService.getRoomName($scope.rooms, $scope.vacation.room);
+	            	// save and update message for each room
+	            	$scope.message += $scope.addVacationByRoom($scope.vacation, roomName);
+	            }  
+	            // display confirmation message in dialog
+		        $scope.showDialog();              
+			}
+			else {
+				var id = $scope.vacation.id;
+				resourcesService.getVacation().update({ vacationId: id }, $scope.vacation, 
+            		function() {
+		                $scope.message = 'La fermeture a bien été modifiée'; 
+		                $scope.showDialog();
+		            },
+		            function(response) {
+		                $scope.message = 'Echec de la modification de la fermeture';
+		                $log.warn ('Error: '+response.status + ' ' + response.statusText);
+		                $scope.showDialog();
+		            }
+		        );
+			}
 
 		};
 	}])

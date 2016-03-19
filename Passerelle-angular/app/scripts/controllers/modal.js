@@ -3,13 +3,21 @@
 angular.module('passerelle2App')
   .controller('ModalCtrl', [ '$scope', '$state', '$log', '$confirm', 'resourcesService', '$mdDialog', function($scope, $state, $log, $confirm, resourcesService, $mdDialog) { 
 
-	$scope.goToUpdate = function(id) {
+  	var updateBookingState = 'app.updatebooking.form';
+  	var updateVacationState = 'app.updatevacation.form';
+
+	$scope.goToUpdateBooking = function(id) {
 		$('.modal-backdrop').remove(); 
 		$('body').removeClass('modal-open');
-		$state.go('app.updatebooking.form', { bookingId: id });
+		$state.go(updateBookingState, { bookingId: id });
 	};
-	// TEST
-    $scope.delete = function(bookingId) {
+	$scope.goToUpdateVacation = function(id) {
+		$('.modal-backdrop').remove(); 
+		$('body').removeClass('modal-open');
+		$state.go(updateVacationState, { vacationId: id });
+	};
+
+    $scope.deleteBooking = function(bookingId) {
       $confirm({text: 'Attention : Etes-vous sûr de vouloir supprimer cette réservation?'})
         .then(function() {
 			resourcesService.getBookings().delete( { bookingId: bookingId },
@@ -26,6 +34,25 @@ angular.module('passerelle2App')
 			); 
         });
     };
+
+    $scope.deleteVacation = function(vacationId) {
+      $confirm({text: 'Attention : Etes-vous sûr de vouloir annuler cette fermeture?'})
+        .then(function() {
+			resourcesService.getVacation().delete( { vacationId: vacationId },
+				// recuperer le resultat de save (success ou error)
+				function() {
+				    $scope.message = 'L\'élément a bien été supprimé'; 
+				    $scope.showDialog();
+				},
+				function(response) {
+				    $scope.message = 'Echec de la suppression';
+				    $scope.showDialog();
+				    $log.warn ('Error: '+response.status + ' ' + response.statusText);
+				}
+			); 
+        });
+    };
+
     // TODO: essayer de factoriser
     $scope.showDialog = function(){
     	$mdDialog.show(
@@ -42,7 +69,7 @@ angular.module('passerelle2App')
 
 }])
 .run(function($confirmModalDefaults) {
-  $confirmModalDefaults.defaultLabels.title = 'Suppresion de la réservation';
+  $confirmModalDefaults.defaultLabels.title = 'Suppresion de l\'élément';
   $confirmModalDefaults.defaultLabels.ok = 'OK';
   $confirmModalDefaults.defaultLabels.cancel = 'Annuler';
 });

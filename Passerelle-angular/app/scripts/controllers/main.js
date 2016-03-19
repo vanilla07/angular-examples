@@ -8,16 +8,14 @@
  * Controller of the passerelleAngularApp
  */
 angular.module('passerelle2App')
-  .controller('MainCtrl', [ '$scope', 'resourcesService', function($scope, resourcesService) {
+  .controller('MainCtrl', [ '$scope', 'resourcesService', 'formService', function($scope, resourcesService, formService) {
     this.awesomeThings = [
       'HTML5 Boilerplate',
       'AngularJS',
       'Karma'
     ];
 
-    var today = new Date();
-    // format date to '2016-10-15'
-    var date = today.toISOString().substring(0, 10);
+    var date = formService.getNowISO();
     // Resource variables
     $scope.nextBookings = [];
     $scope.channels = resourcesService.getChannels();

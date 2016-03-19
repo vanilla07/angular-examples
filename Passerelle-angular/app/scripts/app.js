@@ -50,11 +50,10 @@ angular
           url:'bookings',
           views: {
               'content@': {
-                  templateUrl : 'views/add-booking.html',
-                  controller  : 'CalCtrl'                  
+                  templateUrl : 'views/booking.html',
+                  controller  : 'AddBookingCtrl'                  
               }
           },
-          templateUrl: 'views/booking-form.html'
       })
       /// route for the add reservation page
       .state('app.bookings.add', {
@@ -66,7 +65,7 @@ angular
           url:'booking/:bookingId',
           views: {
               'content@': {
-                  templateUrl : 'views/add-booking.html',
+                  templateUrl : 'views/booking.html',
                   controller  : 'UpdateBookingCtrl'                  
               }
           }
@@ -84,8 +83,8 @@ angular
           url:'vacation',
           views: {
               'content@': {
-                  templateUrl : 'views/add-vacation.html',
-                  controller  : 'CalCtrl'                  
+                  templateUrl : 'views/vacation.html',
+                  controller  : 'AddVacationCtrl'                  
               }
           }
       })
@@ -94,18 +93,18 @@ angular
           url:'/add',
           templateUrl: 'views/vacation-form.html'
       })
-      .state('app.updateVacation', {
+      .state('app.updatevacation', {
           abstract: true,
           url:'vacation/:vacationId',
           views: {
               'content@': {
-                  templateUrl : 'views/add-vacation.html',
+                  templateUrl : 'views/vacation.html',
                   controller  : 'UpdateVacationCtrl'                  
               }
           }
       })
       /// route for the update vacation page
-      .state('app.updateVacation.form', {
+      .state('app.updatevacation.form', {
           url: '/update',
           templateUrl: 'views/vacation-form.html'
       })

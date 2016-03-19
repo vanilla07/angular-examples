@@ -7,9 +7,7 @@ angular.module('passerelle2App')
     	$scope.rowTitle = 'Modifier une réservation';
 		$scope.formTitle = 'Modifier la réservation';
 
-        var today = new Date();
-        // format date to '2016-10-15'
-        var date = today.toISOString().substring(0, 10);
+        var date = formService.getNowISO();
 
     	// init partials
 		$scope.calendarsTemplate = 'views/calendars.html';

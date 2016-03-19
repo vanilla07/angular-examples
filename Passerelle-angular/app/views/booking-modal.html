@@ -1,5 +1,5 @@
 <!-- modal -->
-<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" ng-controller="ModalCtrl">
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="booking details" ng-controller="ModalCtrl">
 	<div class="modal-dialog" role="document">
 		<div class="modal-content">
 		  <div class="modal-header">
@@ -20,8 +20,8 @@
 			<p><strong>Notes :</strong> {{selectedBooking.notes}} </p>		
 		  </div>
 		  <div class="modal-footer">
-		  	  <button type="button" data-dismiss="modal" class="btn btn-primary" ng-click="goToUpdate(selectedBooking.id)">Modifier</button>
-        	  <button type="button" data-dismiss="modal" class="btn btn-danger" ng-click="delete(selectedBooking.id)">Supprimer</button>
+		  	  <button type="button" data-dismiss="modal" class="btn btn-primary" ng-click="goToUpdateBooking(selectedBooking.id)">Modifier</button>
+        	  <button type="button" data-dismiss="modal" class="btn btn-danger" ng-click="deleteBooking(selectedBooking.id)">Supprimer</button>
 		      <button type="button" data-dismiss="modal" class="btn btn-default">Fermer</button>
 		  </div>
 		</div><!-- /.modal-content -->

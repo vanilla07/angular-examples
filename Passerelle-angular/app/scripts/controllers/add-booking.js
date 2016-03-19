@@ -1,22 +1,19 @@
 'use strict';
 
 angular.module('passerelle2App')
-    .controller('CalCtrl', [ '$scope', 'resourcesService', '$log', function($scope, resourcesService,$log) { 
+    .controller('AddBookingCtrl', [ '$scope', 'resourcesService', 'formService', '$log', function($scope, resourcesService, formService, $log) { 
 		$scope.$log = $log;
 		
 		// init partials
 		$scope.calendarsTemplate = 'views/calendars.html';
 		$scope.modalTemplate = 'views/booking-modal.html';
 
-		var today = new Date();
-	    // format date to '2016-10-15'
-	    var date = today.toISOString().substring(0, 10);
+		var date = formService.getNowISO();
 		
 		// init $scope Resource values 
         resourcesService.getBookings().query(
             function(response) {
                 $scope.bookings = response;
-                $scope.showBookings = true;
             },
             function(response) {
                 $scope.message = 'Error: '+response.status + ' ' + response.statusText;

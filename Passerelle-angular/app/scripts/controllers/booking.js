@@ -103,8 +103,6 @@ angular.module('passerelle2App')
 		                $scope.showDialog();
 		            }
             	); 
-	            $scope.bookings = resourcesService.getBookings().query();
-	            // TODO : trouver un moyen  propre pour mettre à jour le calendrier et la liste
 	        }
 	        // update booking
 	        else {
