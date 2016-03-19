@@ -111,53 +111,20 @@ angular.module('passerelle2App')
 		    );
 	    };
 		
-	    $scope.addVacationByRoom = function (vacation, roomName) {
-	    	var message = '';
-	    	resourcesService.getVacation().save(vacation,
-        		// get result of save action (success ou error)
-        		function() {
-	                message = 'La fermeture a bien été prise en compte pour la chambre ' + roomName + '\n'; 
-	                // succes : we clean the form datas
-            		$scope.newVacation();
-	            },
-	            function() {
-	                message = 'Echec de la fermeture pour la chambre ' + roomName + '\n';
-	            }
-            );
-            return message;
-	    };
-
-	    // TODO : à utiliser plus tard
-	    $scope.updateVacationByRoom = function (vacation, roomName) {
-	    	var message = '';
-	    	resourcesService.getVacation().save(vacation,
-        		// get result of save action (success ou error)
-        		function() {
-	                message = 'La fermeture a bien été prise en compte pour la chambre ' + roomName + '\n'; 
-	                // succes : we clean the form datas
-            		$scope.newVacation();
-	            },
-	            function() {
-	                message = 'Echec de la fermeture pour la chambre ' + roomName + '\n';
-	            }
-            );
-            return message;
-	    };
-
 		$scope.addVacation = function () {
-            var i = 0;
              // new booking
+            // TODO: A modifier coté service pour tout sauvegarder en une commande
             if (!$scope.isUpdate) {
-            	$scope.message = '';
-	            // save vacations based on which rooms were selected
-	            for (i = 0; i < $scope.selectedRooms.length; i++) {
-	            	$scope.vacation.room = $scope.selectedRooms[i];
-	            	var roomName = resourcesService.getRoomName($scope.rooms, $scope.vacation.room);
-	            	// save and update message for each room
-	            	$scope.message += $scope.addVacationByRoom($scope.vacation, roomName);
-	            }  
-	            // display confirmation message in dialog
-		        $scope.showDialog();              
+	            var i = 0;
+
+		        // save vacations based on which rooms were selected
+		        for (i = 0; i < $scope.selectedRooms.length; i++) {
+		        	$scope.vacation.room = $scope.selectedRooms[i];
+		        	resourcesService.getVacation().save($scope.vacation);
+		        } 
+	            // TODO: gestion des cas d'erreur
+	            $scope.message = 'La fermeture a bien été prise en compte';
+	            //$scope.showDialog();               
 			}
 			else {
 				var id = $scope.vacation.id;
